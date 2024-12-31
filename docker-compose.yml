@@ -1,0 +1,17 @@
+version: '2'
+services:
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=newgeniee
+      - MYSQL_PASSWORD=0429
+      - MYSQL_DATABASE=hhplus
+    volumes:
+      - ./data/mysql/:/var/lib/mysql
+
+networks:
+  default:
+    driver: bridge
