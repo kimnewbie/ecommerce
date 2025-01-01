@@ -1,4 +1,4 @@
-package hhplus.newgeniee.ecommerce.config.jpa;
+package hhplus.newgeniee.ecommerce.infra.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
