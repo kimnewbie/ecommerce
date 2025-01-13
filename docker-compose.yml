@@ -1,17 +1,44 @@
-version: '2'
 services:
   mysql:
-    image: mysql:8.0
+    image: mysql:8.4.3
+    container_name: newgeniee-ecommerce
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: aa
+      MYSQL_DATABASE: hhplus
+      MYSQL_USER: newgeniee
+      MYSQL_PASSWORD: aa
+      TZ: UTC
     ports:
       - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=newgeniee
-      - MYSQL_PASSWORD=0429
-      - MYSQL_DATABASE=hhplus
     volumes:
-      - ./data/mysql/:/var/lib/mysql
+      - ./db/mysql/data:/var/lib/mysql
+      - ./db/mysql/conf.d:/etc/mysql/conf.d
+  # mock server
+  swagger-ui:
+    container_name: swagger-ui
+    image: swaggerapi/swagger-ui
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./swagger.json:/swagger.json
+    environment:
+      SWAGGER_JSON: /swagger.json
 
+  swagger-api:
+    platform: linux/amd64
+    container_name: swagger-api
+    image: danielgtaylor/apisprout
+    ports:
+      - "8081:8000"
+    volumes:
+      - ./swagger.json:/swagger.json
+    command: /swagger.json
+    networks:
+      swagger_link:
+        aliases:
+          - local.swagger.api
 networks:
-  default:
+  swagger_link:
+    name: swagger_link
     driver: bridge
