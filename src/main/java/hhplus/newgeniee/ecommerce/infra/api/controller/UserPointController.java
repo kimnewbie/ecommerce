@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/point/{userId}")
+@RequestMapping("/api/v1/point/{userId}")
 @Tag(name = "User Point API", description = "사용자 포인트 관련 API")
 public class UserPointController {
 
