@@ -1,0 +1,870 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "e-commerce API",
+    "description": "e-commerce API 명세서",
+    "version": "v0.0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/v1/point/charge": {
+      "post": {
+        "tags": [
+          "포인트 API"
+        ],
+        "summary": "포인트 충전",
+        "description": "포인트를 충전한다.",
+        "operationId": "chargePoint",
+        "requestBody": {
+          "content": {
+            "application/json;charset=UTF-8": {
+              "schema": {
+                "$ref": "#/components/schemas/PointChargeApiRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/PointChargeApiResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "실패",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "충전 포인트는 1원 이상이어야 합니다."
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payments": {
+      "post": {
+        "tags": [
+          "결제 API"
+        ],
+        "summary": "결제",
+        "description": "주문에 대한 결제를 한다.",
+        "operationId": "payment",
+        "requestBody": {
+          "content": {
+            "application/json;charset=UTF-8": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentApiRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/PaymentApiResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "실패",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "보유 포인트가 부족합니다."
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders": {
+      "post": {
+        "tags": [
+          "주문 API"
+        ],
+        "summary": "주문 생성",
+        "description": "상품 상세에서 주문을 생성한다.",
+        "operationId": "createOrder",
+        "requestBody": {
+          "content": {
+            "application/json;charset=UTF-8": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderCreateApiRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/OrderCreateApiResponse"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/coupons/issue": {
+      "post": {
+        "tags": [
+          "쿠폰 API"
+        ],
+        "summary": "쿠폰 발급",
+        "description": "사용자가 쿠폰 아이디로 쿠폰을 발급한다.",
+        "operationId": "issueCoupon",
+        "requestBody": {
+          "content": {
+            "application/json;charset=UTF-8": {
+              "schema": {
+                "$ref": "#/components/schemas/CouponIssueApiRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/IssuedCouponApiResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "실패",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "유효하지 않은 쿠폰입니다."
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "tags": [
+          "상품 API"
+        ],
+        "summary": "상품 목록 조회",
+        "description": "상품 목록을 조회한다.",
+        "operationId": "getProducts",
+        "parameters": [
+          {
+            "name": "상품 조회 조건",
+            "in": "query",
+            "example": "name=상품1"
+          },
+          {
+            "name": "페이지 조건",
+            "in": "query",
+            "example": "page=1&size=20"
+          },
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ProductSearchApiRequest"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ProductApiResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/{productId}": {
+      "get": {
+        "tags": [
+          "상품 API"
+        ],
+        "summary": "상품 단건 조회",
+        "description": "상품 아이디로 상품을 조회한다.",
+        "operationId": "getProduct",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/ProductApiResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "실패",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "상품을 찾을 수 없습니다."
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/best": {
+      "get": {
+        "tags": [
+          "상품 API"
+        ],
+        "summary": "베스트 상품 조회",
+        "description": "베스트 상품을 조회한다.",
+        "operationId": "getBestProducts",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/BestProductApiResponse"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/point": {
+      "get": {
+        "tags": [
+          "포인트 API"
+        ],
+        "summary": "포인트 잔액 조회",
+        "description": "보유한 포인트 잔액을 조회한다.",
+        "operationId": "getPoint",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "사용자 ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/PointApiResponse"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/coupons/{couponId}": {
+      "get": {
+        "tags": [
+          "쿠폰 API"
+        ],
+        "summary": "쿠폰 단건 조회",
+        "description": "쿠폰 아이디로 쿠폰을 조회한다.",
+        "operationId": "getCoupon",
+        "parameters": [
+          {
+            "name": "couponId",
+            "in": "path",
+            "description": "쿠폰 ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CouponApiResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "실패",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "쿠폰을 찾을 수 없습니다."
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PointChargeApiRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "description": "사용자 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "chargePoint": {
+            "type": "integer",
+            "description": "충전 포인트 금액",
+            "format": "int32",
+            "example": 1000
+          }
+        },
+        "description": "포인트 충전 요청"
+      },
+      "PointChargeApiResponse": {
+        "type": "object",
+        "properties": {
+          "point": {
+            "type": "integer",
+            "description": "충전 후 포인트",
+            "format": "int32",
+            "example": 10000
+          }
+        },
+        "description": "포인트 충전 응답"
+      },
+      "PaymentApiRequest": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "integer",
+            "description": "주문 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "userId": {
+            "type": "integer",
+            "description": "사용자 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "couponId": {
+            "type": "integer",
+            "description": "쿠폰 ID",
+            "format": "int64",
+            "example": 1
+          }
+        },
+        "description": "결제 요청"
+      },
+      "PaymentApiResponse": {
+        "type": "object",
+        "properties": {
+          "paymentId": {
+            "type": "integer",
+            "description": "결제 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "orderId": {
+            "type": "integer",
+            "description": "주문 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "paymentPrice": {
+            "type": "integer",
+            "description": "결제 금액",
+            "format": "int32",
+            "example": 10000
+          }
+        },
+        "description": "결제 응답"
+      },
+      "OrderCreateApiRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "description": "사용자 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "orderItems": {
+            "type": "array",
+            "description": "주문 상품 목록",
+            "items": {
+              "$ref": "#/components/schemas/OrderItemCreateApiRequest"
+            }
+          }
+        },
+        "description": "주문 생성 요청"
+      },
+      "OrderItemCreateApiRequest": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "description": "상품 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "주문 상품 수량",
+            "format": "int32",
+            "example": 100
+          }
+        },
+        "description": "주문에 생성될 상품 정보"
+      },
+      "OrderCreateApiResponse": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "integer",
+            "description": "주문 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "amount": {
+            "type": "integer",
+            "description": "주문 총 금액",
+            "format": "int32",
+            "example": 10000
+          }
+        },
+        "description": "주문 생성 응답"
+      },
+      "CouponIssueApiRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "description": "사용자 ID",
+            "format": "int64",
+            "example": 2
+          },
+          "couponId": {
+            "type": "integer",
+            "description": "쿠폰 ID",
+            "format": "int64",
+            "example": 1
+          }
+        },
+        "description": "쿠폰 발급 요청"
+      },
+      "IssuedCouponApiResponse": {
+        "type": "object",
+        "properties": {
+          "couponId": {
+            "type": "integer",
+            "description": "쿠폰 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "쿠폰명",
+            "example": "쿠폰1"
+          },
+          "discountAmount": {
+            "type": "integer",
+            "description": "할인금액",
+            "format": "int32",
+            "example": 1000
+          },
+          "expiredAt": {
+            "type": "string",
+            "description": "쿠폰 만료일",
+            "format": "date-time"
+          }
+        },
+        "description": "발급된 쿠폰 응답"
+      },
+      "ProductSearchApiRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "검색 상품명",
+            "example": "상품1"
+          }
+        },
+        "description": "상품 검색 요청"
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ProductApiResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "상품 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "상품명",
+            "example": "상품1"
+          },
+          "price": {
+            "type": "integer",
+            "description": "상품 가격",
+            "format": "int32",
+            "example": 10000
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "상품 수량",
+            "format": "int32",
+            "example": 100
+          },
+          "status": {
+            "type": "string",
+            "description": "상품 상태",
+            "example": "판매중"
+          }
+        },
+        "description": "상품 단건 조회, 목록 응답"
+      },
+      "BestProductApiResponse": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "description": "상품 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "상품명",
+            "example": "상품명"
+          },
+          "totalSaleCount": {
+            "type": "integer",
+            "description": "총 판매량",
+            "format": "int64",
+            "example": 100
+          }
+        },
+        "description": "베스트 상품 응답"
+      },
+      "PointApiResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "description": "사용자 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "point": {
+            "type": "integer",
+            "description": "보유 포인트 잔액",
+            "format": "int32",
+            "example": 10000
+          }
+        },
+        "description": "포인트 조회 응답"
+      },
+      "CouponApiResponse": {
+        "type": "object",
+        "properties": {
+          "couponId": {
+            "type": "integer",
+            "description": "쿠폰 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "쿠폰명",
+            "example": "쿠폰1"
+          },
+          "issueLimit": {
+            "type": "integer",
+            "description": "쿠폰 최대 발급 수량",
+            "format": "int32",
+            "example": 30
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "발급 가능 수량",
+            "format": "int32",
+            "example": 10
+          },
+          "discountAmount": {
+            "type": "integer",
+            "description": "할인금액",
+            "format": "int32",
+            "example": 1000
+          }
+        },
+        "description": "쿠폰 단건 조회 응답"
+      }
+    }
+  }
+}
