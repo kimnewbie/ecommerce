@@ -1,4 +1,4 @@
-CREATE TABLE USERS
+CREATE TABLE  USERS
 (
     id         BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     name       VARCHAR(50)  NOT NULL UNIQUE COMMENT '이름',
@@ -7,7 +7,7 @@ CREATE TABLE USERS
     deleted_at TIMESTAMP(2)
 ) COMMENT '사용자 테이블';
 
-CREATE TABLE POINT
+CREATE TABLE point
 (
     id         BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     user_id    BIGINT UNSIGNED NOT NULL UNIQUE COMMENT '사용자 아이디',
@@ -17,7 +17,7 @@ CREATE TABLE POINT
     deleted_at TIMESTAMP(2)
 ) COMMENT '사용자 보유 포인트 테이블';
 
-CREATE TABLE PRODUCT
+CREATE TABLE product
 (
     id         BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     name       VARCHAR(100) NOT NULL COMMENT '상품명',
@@ -28,7 +28,7 @@ CREATE TABLE PRODUCT
     deleted_at TIMESTAMP(2)
 ) COMMENT '상품 테이블';
 
-CREATE TABLE STOCK
+CREATE TABLE stock
 (
     id         BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     product_id BIGINT UNSIGNED NOT NULL UNIQUE COMMENT '상품 아이디',
@@ -49,7 +49,7 @@ CREATE TABLE ORDERS
     deleted_at TIMESTAMP(2)
 ) COMMENT '상품 주문 테이블';
 
-CREATE TABLE ORDER_ITEM
+CREATE TABLE order_item
 (
     id           BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     order_id     BIGINT UNSIGNED NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE ORDER_ITEM
     deleted_at   TIMESTAMP(2)
 ) COMMENT '상품 주문 상세 테이블';
 
-CREATE TABLE PAYMENT
+CREATE TABLE payment
 (
     id         BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     order_id   BIGINT UNSIGNED NOT NULL,
@@ -72,20 +72,21 @@ CREATE TABLE PAYMENT
     deleted_at TIMESTAMP(2)
 ) COMMENT '결제 테이블';
 
-CREATE TABLE COUPON
+CREATE TABLE coupon
 (
-    id              BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    name            VARCHAR(100) NOT NULL COMMENT '쿠폰명',
-    issue_limit     INT UNSIGNED      NOT NULL COMMENT '쿠폰 최대 발급 수량',
-    quantity        INT UNSIGNED      NOT NULL COMMENT '발급 가능한 쿠폰 수량(조회 성능을 위해 컬럼으로 추가했으며, coupon_quantity테이블에서 수량을 관리한다.)',
-    discount_amount SMALLINT UNSIGNED NOT NULL COMMENT '할인 금액',
-    expired_at      TIMESTAMP(2) NOT NULL COMMENT '쿠폰 만료일',
-    created_at      TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP(2),
-    updated_at      TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP(2),
-    deleted_at      TIMESTAMP(2)
+    id             BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    name           VARCHAR(100) NOT NULL COMMENT '쿠폰명',
+    issue_limit    INT UNSIGNED       NOT NULL COMMENT '쿠폰 최대 발급 수량',
+    quantity       INT UNSIGNED       NOT NULL COMMENT '발급 가능한 쿠폰 수량(조회 성능을 위해 컬럼으로 추가했으며, coupon_quantity테이블에서 수량을 관리한다.)',
+    discount_type  VARCHAR(20)  NOT NULL COMMENT '할인 타입(FIXED: 정액 / RATE: 정률)',
+    discount_value MEDIUMINT UNSIGNED NOT NULL COMMENT '할인양(FIXED: 정액 할인 금액 / RATE: 정률 할인 비율)',
+    expired_at     TIMESTAMP(2) NOT NULL COMMENT '쿠폰 만료일',
+    created_at     TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP(2),
+    updated_at     TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP(2),
+    deleted_at     TIMESTAMP(2)
 ) COMMENT '쿠폰 테이블';
 
-CREATE TABLE COUPON_QUANTITY
+CREATE TABLE coupon_quantity
 (
     id         BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     coupon_id  BIGINT UNSIGNED NOT NULL COMMENT '쿠폰 아이디',
@@ -95,22 +96,17 @@ CREATE TABLE COUPON_QUANTITY
     deleted_at TIMESTAMP(2)
 ) COMMENT '쿠폰 발급 수량 테이블';
 
-CREATE TABLE ISSUED_COUPON
+CREATE TABLE issued_coupon
 (
-    id              BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    coupon_id       BIGINT UNSIGNED   NOT NULL COMMENT '쿠폰 아이디',
-    user_id         BIGINT UNSIGNED   NOT NULL COMMENT '사용자 아이디',
-    discount_amount SMALLINT UNSIGNED NOT NULL COMMENT '할인 금액',
-    issued_at       TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP(2) COMMENT '쿠폰 발급일',
-    expired_at      TIMESTAMP(2) NOT NULL COMMENT '쿠폰 만료일',
-    used_at         TIMESTAMP(2) COMMENT '쿠폰 사용일',
-    deleted_at      TIMESTAMP(2)
+    id             BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    coupon_id      BIGINT UNSIGNED    NOT NULL COMMENT '쿠폰 아이디',
+    user_id        BIGINT UNSIGNED    NOT NULL COMMENT '사용자 아이디',
+    order_id       BIGINT UNSIGNED    COMMENT '주문 아이디',
+    discount_type  VARCHAR(20)  NOT NULL COMMENT '할인 타입(FIXED: 정액 / RATE: 정률)',
+    discount_value MEDIUMINT UNSIGNED NOT NULL COMMENT '할인양(FIXED: 정액 할인 금액 / RATE: 정률 할인 비율)',
+    issued_at      TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP(2) COMMENT '쿠폰 발급일',
+    expired_at     TIMESTAMP(2) NOT NULL COMMENT '쿠폰 만료일',
+    used_at        TIMESTAMP(2) COMMENT '쿠폰 사용일',
+    updated_at     TIMESTAMP(2) NOT NULL DEFAULT CURRENT_TIMESTAMP(2),
+    deleted_at     TIMESTAMP(2)
 ) COMMENT '발급된 쿠폰 테이블';
-
-CREATE TABLE COUPON_USE_HISTORY
-(
-    id               BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    issued_coupon_id BIGINT UNSIGNED NOT NULL COMMENT '발급된 쿠폰 아이디',
-    order_id         BIGINT UNSIGNED NOT NULL COMMENT '주문 아이디',
-    used_at          TIMESTAMP(0) NOT NULL COMMENT '쿠폰 사용일자'
-) COMMENT '쿠폰 사용 히스토리 테이블';

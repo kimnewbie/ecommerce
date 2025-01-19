@@ -53,7 +53,7 @@ public class OrderService {
 
                     final Product product = productMap.get(orderItem.getProductId());
                     final Stock stock = stockRepository.findByProductIdForUpdate(product.getId())
-                            .orElseThrow(() -> new NoSuchElementException("상품 재고를 찾을 수 없습니다."));
+                            .orElseThrow(() -> new NoSuchElementException("상품을 찾을 수 없습니다."));
 
                     stockService.decrease(product, stock, orderItem.getQuantity());
 
