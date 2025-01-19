@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at is null")
-@Table(name = "order")
+@Table(name = "orders")
 @Entity
 public class Order extends BaseEntity {
 

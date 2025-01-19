@@ -40,7 +40,7 @@ public class Stock extends BaseEntity {
 
     public void decrease(final int quantity) {
         if (this.quantity < quantity) {
-            throw new IllegalArgumentException("재고 수량이 부족합니다.");
+            throw new IllegalArgumentException("주문 수량이 현재 를 초과할 수 없습니다.");
         }
         this.quantity -= quantity;
     }

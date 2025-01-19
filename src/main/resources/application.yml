@@ -13,7 +13,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
@@ -41,4 +41,7 @@ springdoc:
       path: /docs
       tags-sorter: alpha
       operations-sorter: alpha
+
+cors:
+  allowed-origins: http://localhost:3000,http://localhost:4000
 
