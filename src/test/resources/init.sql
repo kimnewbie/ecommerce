@@ -7,7 +7,7 @@ CREATE TABLE  USERS
     deleted_at TIMESTAMP(2)
 ) COMMENT '사용자 테이블';
 
-CREATE TABLE point
+CREATE TABLE POINT
 (
     id         BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     user_id    BIGINT UNSIGNED NOT NULL UNIQUE COMMENT '사용자 아이디',
@@ -17,7 +17,7 @@ CREATE TABLE point
     deleted_at TIMESTAMP(2)
 ) COMMENT '사용자 보유 포인트 테이블';
 
-CREATE TABLE product
+CREATE TABLE PRODUCT
 (
     id         BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     name       VARCHAR(100) NOT NULL COMMENT '상품명',
@@ -28,7 +28,7 @@ CREATE TABLE product
     deleted_at TIMESTAMP(2)
 ) COMMENT '상품 테이블';
 
-CREATE TABLE stock
+CREATE TABLE STOCK
 (
     id         BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     product_id BIGINT UNSIGNED NOT NULL UNIQUE COMMENT '상품 아이디',
@@ -49,7 +49,7 @@ CREATE TABLE ORDERS
     deleted_at TIMESTAMP(2)
 ) COMMENT '상품 주문 테이블';
 
-CREATE TABLE order_item
+CREATE TABLE ORDER_ITEM
 (
     id           BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     order_id     BIGINT UNSIGNED NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE order_item
     deleted_at   TIMESTAMP(2)
 ) COMMENT '상품 주문 상세 테이블';
 
-CREATE TABLE payment
+CREATE TABLE PAYMENT
 (
     id         BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     order_id   BIGINT UNSIGNED NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE payment
     deleted_at TIMESTAMP(2)
 ) COMMENT '결제 테이블';
 
-CREATE TABLE coupon
+CREATE TABLE COUPON
 (
     id             BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     name           VARCHAR(100) NOT NULL COMMENT '쿠폰명',
@@ -86,7 +86,7 @@ CREATE TABLE coupon
     deleted_at     TIMESTAMP(2)
 ) COMMENT '쿠폰 테이블';
 
-CREATE TABLE coupon_quantity
+CREATE TABLE COUPON_QUANTITY
 (
     id         BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     coupon_id  BIGINT UNSIGNED NOT NULL COMMENT '쿠폰 아이디',
@@ -96,7 +96,7 @@ CREATE TABLE coupon_quantity
     deleted_at TIMESTAMP(2)
 ) COMMENT '쿠폰 발급 수량 테이블';
 
-CREATE TABLE issued_coupon
+CREATE TABLE ISSUED_COUPON
 (
     id             BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     coupon_id      BIGINT UNSIGNED    NOT NULL COMMENT '쿠폰 아이디',

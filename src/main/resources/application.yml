@@ -1,8 +1,12 @@
 logging:
   level:
-    org.hibernate:
-      sql: debug
-      orm.jdbc.bind: trace
+    org :
+      hibernate:
+        SQL: debug
+        orm.jdbc.bind: trace
+      springframework :
+        web : debug
+
 spring:
   application.name: ecommerce
   datasource:
@@ -43,5 +47,5 @@ springdoc:
       operations-sorter: alpha
 
 cors:
-  allowed-origins: http://localhost:3000,http://localhost:4000
+  allowed-origins: http://localhost:3000, http://localhost:4000
 
