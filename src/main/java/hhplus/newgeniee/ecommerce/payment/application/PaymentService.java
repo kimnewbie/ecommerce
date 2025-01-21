@@ -6,6 +6,7 @@ import hhplus.newgeniee.ecommerce.payment.domain.Payment;
 import hhplus.newgeniee.ecommerce.payment.domain.discount.DiscountCalculator;
 import hhplus.newgeniee.ecommerce.point.domain.Point;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ public class PaymentService {
 
     private final DiscountCalculator discountCalculator;
 
+    @Cacheable(cacheNames = "pay", key = "#order.id + '-' + #point.id + '-' + #issuedCoupon.id")
     public Payment pay(final Order order, final Point point, final IssuedCoupon issuedCoupon) {
         final LocalDateTime paymentAt = LocalDateTime.now();
         issuedCoupon.use(order.getId(), paymentAt);

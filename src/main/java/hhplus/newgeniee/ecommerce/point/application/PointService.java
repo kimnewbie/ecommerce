@@ -9,6 +9,7 @@ import hhplus.newgeniee.ecommerce.user.domain.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,6 +23,7 @@ public class PointService {
     private final PointRepository pointRepository;
     private final UserRepository userRepository;
 
+    @Cacheable(cacheNames = "points", key = "#userId")
     public PointResponse getPoint(final Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new EntityNotFoundException("사용자를 찾을 수 없습니다.");
