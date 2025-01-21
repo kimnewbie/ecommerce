@@ -1,11 +1,12 @@
 logging:
   level:
-    org :
+    org:
       hibernate:
         SQL: debug
         orm.jdbc.bind: trace
-      springframework :
-        web : debug
+      springframework:
+        web: debug
+        cache: trace
 
 spring:
   application.name: ecommerce
@@ -33,5 +34,5 @@ spring:
     password: aa
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     defer-datasource-initialization: true

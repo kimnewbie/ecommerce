@@ -29,7 +29,7 @@ public abstract class IntegrationTest {
                 .withUsername("newgeniee")
                 .withPassword("aa")
                 .withEnv("TZ", "UTC")
-                .withInitScript("init.sql")
+                .withInitScript("db/init.sql")
                 .withReuse(true);
 
         mysqlContainer.start();

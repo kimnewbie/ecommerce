@@ -1,30 +1,35 @@
 package hhplus.newgeniee.ecommerce;
 
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
+import jakarta.annotation.PreDestroy;
+import org.springframework.context.annotation.Configuration;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 /**
  * MySQL Container Test
  */
-@Profile("testcontainers")
-@TestConfiguration(proxyBeanMethods = false)
-public class TestcontainersConfiguration {
+@Configuration
+class TestcontainersConfiguration {
 
-    @Bean
-    @ServiceConnection
-    MySQLContainer<?> mysqlContainer() {
-        MySQLContainer<?> container = new MySQLContainer<>(DockerImageName.parse("mysql:8.4.3"))
-                .withDatabaseName("ecommerce")
+    public static final MySQLContainer<?> MYSQL_CONTAINER;
+
+    static {
+        MYSQL_CONTAINER = new MySQLContainer<>(DockerImageName.parse("mysql:8.4.3"))
+                .withDatabaseName("hhplus")
                 .withUsername("newgeniee")
                 .withPassword("aa")
-                .withEnv("TZ", "UTC")
-                .withReuse(true);
+                .withInitScript("db/init.sql");
+        MYSQL_CONTAINER.start();
 
-        container.start();
-        return container;
+        System.setProperty("spring.datasource.url", MYSQL_CONTAINER.getJdbcUrl() + "?characterEncoding=UTF-8&serverTimezone=UTC");
+        System.setProperty("spring.datasource.username", MYSQL_CONTAINER.getUsername());
+        System.setProperty("spring.datasource.password", MYSQL_CONTAINER.getPassword());
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        if (MYSQL_CONTAINER.isRunning()) {
+            MYSQL_CONTAINER.stop();
+        }
     }
 }
