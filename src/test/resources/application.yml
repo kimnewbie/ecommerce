@@ -4,31 +4,34 @@ logging:
       hibernate:
         SQL: debug
         orm.jdbc.bind: trace
-      springframework:
-        web: debug
-        cache: trace
+    springframework:
+      web: debug
+      cache: trace
 
 spring:
-  application.name: ecommerce
+  application:
+    name: ecommerce
   profiles:
-    active: test
+    active: testcontainers
   jpa:
     open-in-view: false
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  cors:
+    allowed-origins: http://localhost:3000, http://localhost:4000
 
-cors:
-  allowed-origins: http://localhost:3000, http://localhost:4000
 ---
+
 # test containers
 spring:
   config:
     activate:
       on-profile: testcontainers
   datasource:
-    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:tc:mysql:8.4.3://hhplus
     username: newgeniee
     password: aa
@@ -36,3 +39,8 @@ spring:
     hibernate:
       ddl-auto: update
     defer-datasource-initialization: true
+  # Redis 설정 (Testcontainers에서 자동 설정)
+  data:
+    redis:
+      host: ${spring.data.redis.host}
+      port: ${spring.data.redis.port}

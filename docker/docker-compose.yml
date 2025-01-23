@@ -14,13 +14,19 @@ services:
     volumes:
       - ./db/mysql/data:/var/lib/mysql
       - ./db/mysql/conf.d:/etc/mysql/conf.d
-  # redis
-  redis-docker:
+    networks:
+      - ecommerce-network
+  # redis (docker run -p 6379:6379 redis -> docker ps -> docker exec -it 25dfcdfb3805 redis-cli
+  # > setnx seat10 1 (SIMPLE LOCK, SIMPLE LOCK에 while 문 추가 하면 SPIN LOCK)
+  # 10s 시간 제한 > set seat10 nx 10
+  # 해제 > unlink seat10)
+  redis:
     image: redis:latest
-    container_name: 'packy-redis'
-    command: redis-server --port 6379
+    container_name: packy-redis
     ports:
-      - '6379:6379'
+      - "6379:6379"
+    networks:
+      - ecommerce-network
 
   # mock server
   swagger-ui:
@@ -32,6 +38,8 @@ services:
       - ./swagger.json:/swagger.json
     environment:
       SWAGGER_JSON: /swagger.json
+    networks:
+      - ecommerce-network
 
   swagger-api:
     platform: linux/amd64
@@ -46,7 +54,10 @@ services:
       swagger_link:
         aliases:
           - local.swagger.api
+
 networks:
   swagger_link:
     name: swagger_link
+    driver: bridge
+  ecommerce-network:
     driver: bridge

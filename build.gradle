@@ -46,6 +46,9 @@ dependencies {
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+    // Redisson
+    implementation 'org.redisson:redisson-spring-boot-starter:3.27.0'
+
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
@@ -54,6 +57,7 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:mysql'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 }
 
 sourceSets {
