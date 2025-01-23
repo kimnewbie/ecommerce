@@ -14,6 +14,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -246,6 +249,70 @@ class CouponServiceIntegrationTest extends ServiceIntegrationTest {
             assertThatThrownBy(() -> couponService.issueCoupon(request))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("쿠폰 수량이 부족합니다.");
+        }
+    }
+
+
+    @DisplayName("분산 락을 사용한 쿠폰 발급 동시성 테스트")
+    @Nested
+    class DistributedLockCouponIssueTest extends ServiceIntegrationTest {
+
+        @DisplayName("동시 요청 시 분산 락을 통해 하나의 요청만 발급된다.")
+        @Test
+        void issueCouponWithDistributedLock() throws InterruptedException, ExecutionException {
+            // given
+            final String userName = "사용자1";
+            final User user = userJpaRepository.save(User.builder().name(userName).build());
+
+            final String couponName = "쿠폰1";
+            final int issueLimit = 30;
+            final int quantity = 30;
+            final int discountValue = 1000;
+
+            final Coupon coupon = couponJpaRepository.save(Coupon.builder()
+                    .name(couponName)
+                    .issueLimit(issueLimit)
+                    .quantity(quantity)
+                    .discountType(DiscountType.FIXED)
+                    .discountValue(discountValue)
+                    .expiredAt(LocalDateTime.now().plusDays(1))
+                    .build());
+
+            couponQuantityJpaRepository.save(CouponQuantity.builder()
+                    .couponId(coupon.getId())
+                    .quantity(quantity)
+                    .build());
+
+            final CouponIssueRequest request = CouponIssueRequest.builder()
+                    .couponId(coupon.getId())
+                    .userId(user.getId())
+                    .build();
+
+            // when
+            int threadCount = 10; // 동시 요청 수
+            ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+            CountDownLatch latch = new CountDownLatch(threadCount);
+
+            // 여러 스레드에서 동시에 쿠폰 발급 요청
+            List<Future<IssuedCouponResponse>> futures = new ArrayList<>();
+            for (int i = 0; i < threadCount; i++) {
+                futures.add(executorService.submit(() -> {
+                    try {
+                        return couponService.issueCoupon(request);
+                    } finally {
+                        latch.countDown();
+                    }
+                }));
+            }
+
+            // all threads complete
+            latch.await();
+
+            // then
+            // 쿠폰 발급은 한 번만 성공해야 한다
+            long issuedCount = issuedCouponJpaRepository.countByCouponId(coupon.getId());
+            assertThat(issuedCount).isEqualTo(1); // 쿠폰은 하나만 발급되어야 한다.
+            executorService.shutdown();
         }
     }
 }

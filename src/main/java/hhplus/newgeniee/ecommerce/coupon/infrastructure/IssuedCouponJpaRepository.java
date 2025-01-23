@@ -5,6 +5,7 @@ import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -14,4 +15,7 @@ public interface IssuedCouponJpaRepository extends JpaRepository<IssuedCoupon, L
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select i from IssuedCoupon i where i.couponId = :couponId and i.userId = :userId")
     Optional<IssuedCoupon> findByCouponIdAndUserIdForUpdate(Long couponId, Long userId);
+
+    @Query("select count(i) from IssuedCoupon i where i.couponId = :couponId")
+    long countByCouponId(@Param("couponId") Long couponId);
 }
